@@ -4,9 +4,10 @@ MeshCore repeater firmware for the **Seeed Studio XIAO ESP32S3** and the
 **[Ebyte E22P-868M30S](https://www.cdebyte.com/products/E22P-868M30S)** LoRa
 module.
 
-This is a standalone firmware project based on MeshCore repeater v1.16.0. It
-adds the XIAO/E22P hardware target, radio diagnostics, optional home Wi-Fi and
-field-tested E22P noise-floor recovery.
+This is a standalone, single-target firmware project based on MeshCore repeater
+v1.16.0. It supports only the XIAO ESP32S3 + E22P-868M30S combination and adds
+radio diagnostics, optional home Wi-Fi and field-tested E22P noise-floor
+recovery.
 
 ## Highlights
 
