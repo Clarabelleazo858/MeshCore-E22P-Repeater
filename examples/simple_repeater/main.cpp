@@ -112,6 +112,10 @@ void setup() {
   sensors.begin();
 
   the_mesh.begin(fs);
+#if (defined(ESP32) || defined(ESP32_PLATFORM)) && defined(WIFI_OTA_PERSISTENT_STA)
+  board.setWebFallbackPassword(the_mesh.getNodePrefs()->password);
+  board.loopWifiOTA();
+#endif
   board.setWifiOTACommandHandler(handleWifiCommand);
   board.setBootStatus("mesh_ok");
 

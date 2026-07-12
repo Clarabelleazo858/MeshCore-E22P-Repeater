@@ -100,6 +100,10 @@ The fixed web username is `admin`. The password protects `/update`, `/cmd`,
 network; it uses HTTP Basic Authentication and must not be exposed to the
 internet.
 
+When upgrading an older build that already has persistent STA enabled, the
+existing MeshCore admin password is used as a migration fallback until a
+separate web password is saved. Fresh installations do not enable this fallback.
+
 See [docs/e22p_commands.md](docs/e22p_commands.md) for the command reference.
 
 ## Radio defaults

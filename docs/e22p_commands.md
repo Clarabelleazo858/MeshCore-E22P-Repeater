@@ -21,6 +21,8 @@ the local serial console at 115200 baud.
 The web username is always `admin`. On a new device, Wi-Fi and web access are
 off. If no web password exists, `start ota` retains the original MeshCore 1.16
 temporary AP behavior; diagnostic and command endpoints remain unavailable.
+An older installation with STA already enabled temporarily reuses its MeshCore
+admin password so LAN OTA remains reachable after upgrading.
 
 ## Radio and noise floor
 

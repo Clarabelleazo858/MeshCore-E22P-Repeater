@@ -51,18 +51,21 @@ static bool load_wifi_sta_enabled() {
 static void load_web_config() {
   if (web_config_loaded) return;
   web_password[0] = 0;
+  bool has_web_enabled_setting = false;
   Preferences prefs;
   if (prefs.begin("meshcore", true)) {
     prefs.getString("web_pass", web_password, sizeof(web_password));
-    web_enabled = prefs.getBool("web_on", false);
+    has_web_enabled_setting = prefs.isKey("web_on");
+    if (has_web_enabled_setting) web_enabled = prefs.getBool("web_on", false);
     prefs.end();
   }
+  if (!has_web_enabled_setting) web_enabled = load_wifi_sta_enabled();
   web_config_loaded = true;
 }
 
 static bool web_password_is_set() {
   load_web_config();
-  return strlen(web_password) >= 8;
+  return web_password[0] != 0;
 }
 
 static bool require_web_auth(AsyncWebServerRequest *request) {
@@ -287,7 +290,7 @@ void ESP32Board::beginWifiOTA(const char* id) {
   wifi_manager.setConnectTimeout(10);
 #endif
 
-  if (web_password_is_set()) {
+  if (strlen(web_password) >= 8) {
     wifi_manager.autoConnect(wifi_manager_ap_name, web_password);
   } else {
     wifi_manager.autoConnect(wifi_manager_ap_name);
@@ -431,6 +434,13 @@ bool ESP32Board::setWebPassword(const char* password) {
   return true;
 }
 
+void ESP32Board::setWebFallbackPassword(const char* password) {
+  load_web_config();
+  if (web_password[0] == 0 && load_wifi_sta_enabled() && password && password[0]) {
+    snprintf(web_password, sizeof(web_password), "%s", password);
+  }
+}
+
 void ESP32Board::setWebEnabled(bool enabled) {
   load_web_config();
   web_enabled = enabled;
@@ -541,6 +551,8 @@ bool ESP32Board::hasWebPassword() const {
 }
 bool ESP32Board::setWebPassword(const char* password) {
   return false;
+}
+void ESP32Board::setWebFallbackPassword(const char* password) {
 }
 void ESP32Board::setWebEnabled(bool enabled) {
 }

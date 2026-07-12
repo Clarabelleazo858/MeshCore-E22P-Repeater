@@ -163,6 +163,7 @@ public:
   bool isWebEnabled() const;
   bool hasWebPassword() const;
   bool setWebPassword(const char* password);
+  void setWebFallbackPassword(const char* password);
   void setWebEnabled(bool enabled);
   void formatWebStatus(char* reply, size_t reply_len) const;
   void formatWifiOTAStatus(char* reply, size_t reply_len) const;
