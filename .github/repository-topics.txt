@@ -1,0 +1,12 @@
+meshcore
+e22p-868m30s
+ebyte
+lora
+sx1262
+esp32s3
+xiao-esp32s3
+868mhz
+mesh-network
+repeater
+platformio
+firmware

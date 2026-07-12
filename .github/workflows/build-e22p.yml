@@ -1,0 +1,44 @@
+name: Build E22P repeater
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['e22p-*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up PlatformIO
+        uses: ./.github/actions/setup-build-environment
+
+      - name: Build application and merged images
+        run: |
+          pio run -e Xiao_S3_E22P_repeater
+          pio run -e Xiao_S3_E22P_repeater -t mergebin
+          mkdir -p dist
+          cp .pio/build/Xiao_S3_E22P_repeater/firmware.bin dist/MeshCore-E22P-868M30S.bin
+          cp .pio/build/Xiao_S3_E22P_repeater/firmware-merged.bin dist/MeshCore-E22P-868M30S-merged.bin
+          cd dist
+          sha256sum *.bin > SHA256SUMS
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: MeshCore-E22P-868M30S
+          path: dist/
+
+      - name: Create draft release
+        if: startsWith(github.ref, 'refs/tags/e22p-')
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          files: dist/*
