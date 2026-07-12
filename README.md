@@ -54,6 +54,32 @@ See [docs/wiring.md](docs/wiring.md) before connecting or powering the module.
 
 ## Build
 
+### Ready-to-flash firmware
+
+Most users do not need PlatformIO. Download both files from the
+[latest GitHub release](https://github.com/Sukecz/MeshCore-E22P-Repeater/releases/latest):
+
+- `MeshCore-E22P-868M30S-merged.bin` — first installation over USB with the
+  MeshCore Web Flasher;
+- `MeshCore-E22P-868M30S.bin` — later OTA updates only.
+
+#### First installation with MeshCore Web Flasher
+
+1. Connect the XIAO ESP32S3 to your computer over USB.
+2. Open the official [MeshCore Web Flasher](https://meshcore.io/flasher) in a
+   Web Serial compatible browser such as Chrome or Edge.
+3. Choose **Custom Firmware**.
+4. Select `MeshCore-E22P-868M30S-merged.bin` from the GitHub release.
+5. Select the XIAO serial port and start flashing.
+6. After reboot, open the flasher's serial console at 115200 baud to configure
+   the repeater name, admin password and radio settings.
+
+The merged image includes the ESP32-S3 bootloader, partition table and
+application and is flashed at offset `0x0`. Do not use the non-merged OTA image
+for a first installation.
+
+### Build from source
+
 Install [PlatformIO](https://platformio.org/), clone this repository and run:
 
 ```bash
